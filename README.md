@@ -1,18 +1,19 @@
 # RPE_challenge
-Pipeline de dados end-to-end com Databricks usando o dataset público da Olist. Projeto com ingestão, transformação (Bronze e Silver) e orquestração com Workflows.   
+Pipeline de dados end-to-end com Databricks usando o dataset público da Olist. 
+Projeto com ingestão, transformação (Bronze e Silver) e orquestração com Workflows.   
 
-ORIGEM
+ORIGEM:
 
 A origem dos dados são subconjunto de dados do "Brazilian E-Commerce Public Dataset by Olist" no qual estamos usando 3 arquivos no formato .csv. A arquitetura tem 3 camadas: Bronze, Silver_1 e Silver_2 (da qual acredito ser a Gold mas estou mantendo o que está descrito no desafio).
 
-BRONZE
+BRONZE:
 
 Na camada Bronze os arquivos são lidos, usados em um dataframe e analisados para verificar se é necessário alterações. 
 Na camada Bronze não são aplicadas alterações. O formato 2017-02-02T14:08:10.000+00:00 é padrão ISO 8601 válido para timestamp.
 O Spark reconhece esse formato como válido para TimestampType e, ao inferir o schema, ele já transforma internamente esses valores em objetos de tipo timestamp — mesmo que a visualização ainda mostre o mesmo formato de string ISO (isso é apenas a forma de exibição).
 Após isso são persistidos como delta. 
 
-SILVER_1 — Transformação de Dimensão (silver.dim_customers)
+SILVER_1 — Transformação de Dimensão (silver.dim_customers):
 
 Na primeira camada Silver, o foco foi transformar a dimensão customers com os seguintes passos:
 1. Leitura da tabela bronze.olist_customers.
