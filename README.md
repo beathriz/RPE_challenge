@@ -21,6 +21,7 @@ Na primeira camada Silver, o foco foi transformar a dimensão customers com os s
 4. Remoção de duplicatas para garantir a unicidade do campo customer_id.
 
 - Verificações de Qualidade
+
 Verificação de nulos nos campos principais.
 Verificação de duplicidade de customer_id.
 Verificação do padrão da coluna state (deve conter exatamente 2 caracteres).
@@ -31,7 +32,6 @@ silver.dim_customers
 SILVER_2 — Transformação de Fatos (silver.fct_order_items)
 
 Apesar de estar descrito como "Silver Layer" no desafio, considerei essa etapa como uma espécie de Silver_2 (ou mesmo Gold, na prática), pois consolida dados de diferentes fontes em uma tabela de fatos.
-
 Nessa etapa, foram combinadas as tabelas: bronze.olist_order_items, bronze.olist_orders e silver.dim_customers
 
 Foram feitos joins com base nos campos order_id e customer_id, e criadas métricas:
@@ -39,6 +39,7 @@ preco_total_item = price + freight_value
 preco_medio_unitario = preco_total_item / order_item_id
 
 - Verificações de Qualidade
+
 Ausência de valores nulos nas colunas principais (order_id, price, etc.).
 Validação para impedir valores negativos em price e freight_value.
 
@@ -54,9 +55,7 @@ Abaixo está a descrição de como o workflow seria configurado, conforme solici
 - Tarefa 2: `Dim_Customers` (executa após o sucesso da Tarefa 1)
 - Tarefa 3: `Fatos_OrderItems` (executa após o sucesso da Tarefa 2)
 - Gatilho: execução manual
-
 Cada tarefa seria configurada como execução de notebook, rodando no mesmo cluster compartilhado, com dependências definidas na aba “Task Dependencies”.
-
 Coloquei gatilho de execução manual pois na Community Edition não é possível configurar gatilhos automáticos, como agendamentos com cron ou execuções diárias. Porém, em um ambiente de produção, seria possível agendar a execução do pipeline para ocorrer diariamente durante a madrugada, por exemplo, às 3h, para não interferir no fluxo de dados do horário comercial. 
 
 Exemplo: 
