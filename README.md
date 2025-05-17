@@ -21,8 +21,7 @@ Na primeira camada Silver, o foco foi transformar a dimensão customers com os s
 3. Padronização do nome das cidades para letras maiúsculas com upper().
 4. Remoção de duplicatas para garantir a unicidade do campo customer_id.
 
-- Verificações de Qualidade
-
+Verificações de Qualidade:
 Verificação de nulos nos campos principais.
 Verificação de duplicidade de customer_id.
 Verificação do padrão da coluna state (deve conter exatamente 2 caracteres).
@@ -30,7 +29,7 @@ Verificação do padrão da coluna state (deve conter exatamente 2 caracteres).
 Os dados tratados foram gravados na tabela Delta:
 silver.dim_customers
 
-SILVER_2 — Transformação de Fatos (silver.fct_order_items)
+SILVER_2 — Transformação de Fatos (silver.fct_order_items):
 
 Apesar de estar descrito como "Silver Layer" no desafio, considerei essa etapa como uma espécie de Silver_2 (ou mesmo Gold, na prática), pois consolida dados de diferentes fontes em uma tabela de fatos.
 Nessa etapa, foram combinadas as tabelas: bronze.olist_order_items, bronze.olist_orders e silver.dim_customers
@@ -39,15 +38,14 @@ Foram feitos joins com base nos campos order_id e customer_id, e criadas métric
 preco_total_item = price + freight_value
 preco_medio_unitario = preco_total_item / order_item_id
 
-- Verificações de Qualidade
-
+Verificações de Qualidade:
 Ausência de valores nulos nas colunas principais (order_id, price, etc.).
 Validação para impedir valores negativos em price e freight_value.
 
 O resultado foi salvo como tabela Delta:
 silver.fct_order_items
 
-WORKFLOW
+WORKFLOW:
 
 A funcionalidade de Workflows (Jobs) não está disponível na Databricks Community Edition.
 Abaixo está a descrição de como o workflow seria configurado, conforme solicitado:
