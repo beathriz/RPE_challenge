@@ -55,9 +55,9 @@ WORKFLOW:
 A funcionalidade de Workflows (Jobs) não está disponível na Databricks Community Edition.
 Abaixo está a descrição de como o workflow seria configurado, conforme solicitado:
 
-- Tarefa 1: `Ingestao_Bronze`
-- Tarefa 2: `Dim_Customers` (executa após o sucesso da Tarefa 1)
-- Tarefa 3: `Fatos_OrderItems` (executa após o sucesso da Tarefa 2)
+- Tarefa 1: Ingestao_Bronze
+- Tarefa 2: Dim_Customers (executa após o sucesso da Tarefa 1)
+- Tarefa 3: Fatos_OrderItems (executa após o sucesso da Tarefa 2)
 - Gatilho: execução manual
 Cada tarefa seria configurada como execução de notebook, rodando no mesmo cluster compartilhado, com dependências definidas na aba “Task Dependencies”.
 Coloquei gatilho de execução manual pois na Community Edition não é possível configurar gatilhos automáticos, como agendamentos com cron ou execuções diárias. Porém, em um ambiente de produção, seria possível agendar a execução do pipeline para ocorrer diariamente durante a madrugada, por exemplo, às 3h, para não interferir no fluxo de dados do horário comercial. 
