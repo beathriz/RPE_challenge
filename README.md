@@ -2,15 +2,18 @@
 Pipeline de dados end-to-end com Databricks usando o dataset público da Olist. Projeto com ingestão, transformação (Bronze e Silver) e orquestração com Workflows.   
 
 ORIGEM
+
 A origem dos dados são subconjunto de dados do "Brazilian E-Commerce Public Dataset by Olist" no qual estamos usando 3 arquivos no formato .csv. A arquitetura tem 3 camadas: Bronze, Silver_1 e Silver_2 (da qual acredito ser a Gold mas estou mantendo o que está descrito no desafio).
 
 BRONZE
+
 Na camada Bronze os arquivos são lidos, usados em um dataframe e analisados para verificar se é necessário alterações. 
 Na camada Bronze não são aplicadas alterações. O formato 2017-02-02T14:08:10.000+00:00 é padrão ISO 8601 válido para timestamp.
 O Spark reconhece esse formato como válido para TimestampType e, ao inferir o schema, ele já transforma internamente esses valores em objetos de tipo timestamp — mesmo que a visualização ainda mostre o mesmo formato de string ISO (isso é apenas a forma de exibição).
 Após isso são persistidos como delta. 
 
 SILVER_1 — Transformação de Dimensão (silver.dim_customers)
+
 Na primeira camada Silver, o foco foi transformar a dimensão customers com os seguintes passos:
 1. Leitura da tabela bronze.olist_customers.
 2. Seleção e renomeação de colunas para nomes mais descritivos (ex: customer_unique_id para unique_id, customer_zip_code_prefix para zip_prefix).
@@ -26,6 +29,7 @@ Os dados tratados foram gravados na tabela Delta:
 silver.dim_customers
 
 SILVER_2 — Transformação de Fatos (silver.fct_order_items)
+
 Apesar de estar descrito como "Silver Layer" no desafio, considerei essa etapa como uma espécie de Silver_2 (ou mesmo Gold, na prática), pois consolida dados de diferentes fontes em uma tabela de fatos.
 
 Nessa etapa, foram combinadas as tabelas: bronze.olist_order_items, bronze.olist_orders e silver.dim_customers
@@ -42,6 +46,7 @@ O resultado foi salvo como tabela Delta:
 silver.fct_order_items
 
 WORKFLOW
+
 A funcionalidade de Workflows (Jobs) não está disponível na Databricks Community Edition.
 Abaixo está a descrição de como o workflow seria configurado, conforme solicitado:
 
@@ -60,6 +65,7 @@ schedule:
   timezone_id: "America/Sao_Paulo"
 
 EXEMPLOS DE QUERIE SQL (para consultar e verificar os dados) 
+
 
 -- Visualizar os primeiros registros
 SELECT * FROM silver.dim_customers LIMIT 10;
@@ -101,8 +107,8 @@ GROUP BY c.state
 ORDER BY frete_medio DESC;
 
 PROCESSAMENTO INCREMENTAL
-ORIGEM
-Necessário adaptação na origem pois podemos incluir a ingestão contínua de novos dados, integrando com fontes como diretórios monitorados ou Kafka (Structured Streaming) 
+
+ORIGEM - Necessário adaptação na origem pois podemos incluir a ingestão contínua de novos dados, integrando com fontes como diretórios monitorados ou Kafka (Structured Streaming) 
 
 Auto Loader com Delta Lake: detectar automaticamente novos arquivos no armazenamento e realizar a carga incremental sem reprocessar dados antigos.
 
