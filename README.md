@@ -104,7 +104,7 @@ JOIN silver.dim_customers c ON f.customer_id = c.customer_id
 GROUP BY c.state
 ORDER BY frete_medio DESC;
 
-PROCESSAMENTO INCREMENTAL
+PROCESSAMENTO INCREMENTAL:
 
 ORIGEM - Necessário adaptação na origem pois podemos incluir a ingestão contínua de novos dados, integrando com fontes como diretórios monitorados ou Kafka (Structured Streaming) 
 
