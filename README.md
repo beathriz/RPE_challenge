@@ -5,6 +5,7 @@ Projeto com ingestão, transformação (Bronze e Silver) e orquestração com Wo
 ORIGEM:
 
 A origem dos dados são subconjunto de dados do "Brazilian E-Commerce Public Dataset by Olist" no qual estamos usando 3 arquivos no formato .csv. A arquitetura tem 3 camadas: Bronze, Silver_1 e Silver_2 (da qual acredito ser a Gold mas estou mantendo o que está descrito no desafio).
+Arquivos: olist_customers_dataset.csv, olist_order_items_dataset.csv e olist_orders_dataset.csv
 
 BRONZE:
 
@@ -12,6 +13,7 @@ Na camada Bronze os arquivos são lidos, usados em um dataframe e analisados par
 Na camada Bronze não são aplicadas alterações. O formato 2017-02-02T14:08:10.000+00:00 é padrão ISO 8601 válido para timestamp.
 O Spark reconhece esse formato como válido para TimestampType e, ao inferir o schema, ele já transforma internamente esses valores em objetos de tipo timestamp — mesmo que a visualização ainda mostre o mesmo formato de string ISO (isso é apenas a forma de exibição).
 Após isso são persistidos como delta. 
+Arquivo: camada_bronze.ipynb
 
 SILVER_1 — Transformação de Dimensão (silver.dim_customers):
 
@@ -28,6 +30,7 @@ Verificação do padrão da coluna state (deve conter exatamente 2 caracteres).
 
 Os dados tratados foram gravados na tabela Delta:
 silver.dim_customers
+Arquivo: camada_sillver_1.ipynb
 
 SILVER_2 — Transformação de Fatos (silver.fct_order_items):
 
@@ -44,6 +47,8 @@ Validação para impedir valores negativos em price e freight_value.
 
 O resultado foi salvo como tabela Delta:
 silver.fct_order_items
+
+Arquivo: camada_silver_2.ipynb
 
 WORKFLOW:
 
@@ -62,8 +67,9 @@ schedule:
   quartz_cron_expression: "0 0 3 * * ?"
   timezone_id: "America/Sao_Paulo"
 
-EXEMPLOS DE QUERIE SQL (para consultar e verificar os dados) 
+Arquivo: WORKFLOW.png
 
+EXEMPLOS DE QUERIE SQL (para consultar e verificar os dados) 
 
 -- Visualizar os primeiros registros
 SELECT * FROM silver.dim_customers LIMIT 10;
@@ -103,6 +109,8 @@ FROM silver.fct_order_items f
 JOIN silver.dim_customers c ON f.customer_id = c.customer_id
 GROUP BY c.state
 ORDER BY frete_medio DESC;
+
+Arquivo: Exemplos de Queries SQL.ipynb 
 
 PROCESSAMENTO INCREMENTAL:
 
